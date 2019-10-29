@@ -1,7 +1,6 @@
 #Ethan Williams
 #Minesweeper
 #20/11/16
-# coding=<encoding utf-8>
 import gc
 from tkinter import *
 import time
