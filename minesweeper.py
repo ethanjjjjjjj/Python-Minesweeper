@@ -38,7 +38,7 @@ def resetgrids():
         ["■","■","■","■","■","■","■","■","■","■"],
         ["■","■","■","■","■","■","■","■","■","■"]]
     bombs=0#sets the initial value of bombs
-    while bombs<20:#loops keeps adding bombs at random coordinates until there are 10 bombs
+    while bombs<20:#loop keeps adding bombs at random coordinates until there are 20 bombs
         x=random.randrange(1,10)#generates the random coordinate for the bomb
         y=random.randrange(1,10)
         if grid[x][y] == "x":
