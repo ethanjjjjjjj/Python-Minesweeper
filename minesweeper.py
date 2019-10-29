@@ -5,6 +5,8 @@ import gc
 from tkinter import *
 import time
 import random #imports the library to make randome coordinates for the bombs
+from PIL import ImageTk, Image
+
 s=""
 global userx
 global usery
@@ -360,6 +362,14 @@ def changegrid(usery,userx):
 #gui stuff:
 root=Tk()
 frame=Frame(root)
+
+HEIGHT = 30
+WIDTH = 30
+path = "C:\\Users\\Tript\\Desktop\\What!\\bomb.jpg"
+thumbnail = Image.open(path)
+thumbnail.thumbnail((HEIGHT, WIDTH), Image.ANTIALIAS)
+bomb = ImageTk.PhotoImage(thumbnail)
+
 def gencanvas():
     global canvas
     canvas=Canvas(frame,width=500,height=500)
@@ -407,7 +417,8 @@ def refreshbuttons():
                 button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="black")
             elif grid2[buttonx][buttony]==8:
                 button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="#D3D3D3")
-            
+            elif grid2[buttonx][buttony]=='x':
+                button1=Button(root, text="", image=bomb)
             else:
                 button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="black")
             window1=canvas.create_window(c,e,height=50,width=50,window=button1)
