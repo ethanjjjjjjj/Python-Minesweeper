@@ -365,7 +365,7 @@ frame=Frame(root)
 
 HEIGHT = 30
 WIDTH = 30
-path = "C:\\Users\\Tript\\Desktop\\What!\\bomb.jpg"
+path = "bomb.jpg"
 thumbnail = Image.open(path)
 thumbnail.thumbnail((HEIGHT, WIDTH), Image.ANTIALIAS)
 bomb = ImageTk.PhotoImage(thumbnail)
