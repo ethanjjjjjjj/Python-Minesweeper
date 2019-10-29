@@ -11,11 +11,7 @@ global usery
 touching = []
 
 
-def get_grid():
-    return [[0] * 10] * 10
-
-
-def resetgrids():
+def reset_grids():
     global grid
     global grid2
     global blanks
@@ -135,7 +131,7 @@ def resetgrids():
                 blanks.append([e, f])
 
 
-resetgrids()
+reset_grids()
 
 
 def printList():  # prints out the 2d grid
@@ -162,7 +158,7 @@ def change_grid(usery, userx):
     global firstgo
     if firstgo == 0:
         while grid[usery][userx] != 0:
-            resetgrids()
+            reset_grids()
         firstgo = firstgo + 1
     grid2[usery][userx] = grid[usery][userx]
 
@@ -423,7 +419,7 @@ def refresh_buttons():
 
 def start_game():
     global firstgo
-    resetgrids()
+    reset_grids()
     refresh_buttons()
 
 
