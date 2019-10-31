@@ -8,9 +8,10 @@ import random #imports the library to make randome coordinates for the bombs
 from PIL import ImageTk, Image
 
 s=""
+touching=[]
 global userx
 global usery
-touching=[]
+
 def resetgrids():
     global grid
     global grid2
@@ -150,7 +151,7 @@ def resetgrids():
             if grid[e][f]==0:
                 blanks.append([e,f])
 
-resetgrids()
+
 def printList():#prints out the 2d grid
     for i in range(0,10):
         out=""
@@ -158,7 +159,6 @@ def printList():#prints out the 2d grid
             out=out+str(grid2[i][c])+" "#adds the value of each line of the grid to a variable
         print(s.join(out))#prints each line of the grid without any quotation marks or square brackets
 #printList() #prints the blank grid initially for the user at the start of the game
-endgame=False
 
 #loop that keeps the game going until the player hits a bomb
     #userx=int(input("input an x value"))
@@ -359,9 +359,89 @@ def changegrid(usery,userx):
             for endx in range(0,10):
                 grid2[endy][endx]=grid[endy][endx]
         endgame=True
-#gui stuff:
-root=Tk()
-frame=Frame(root)
+
+
+def gencanvas():
+    global canvas
+    canvas = Canvas(frame, width=500, height=500)
+    canvas.pack()
+
+
+def determinepos(x, y):
+    changegrid(x, y)
+    refreshbuttons()
+
+
+def refreshbuttons():
+    canvas.delete("all")
+    gc.collect()
+    global buttonx
+    global buttony
+    buttonx = -1
+    buttony = -1
+    buttonnumber = 0
+    for d in range(50, 1000, 100):
+        buttonx = buttonx + 1
+        buttony = -1
+        for b in range(50, 1000, 100):
+            buttony = buttony + 1
+            e = d / 2
+            c = b / 2
+            buttonnumber = buttonnumber + 1
+            if grid2[buttonx][buttony] == 1:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="blue")
+            elif grid2[buttonx][buttony] == 2:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="green")
+            elif grid2[buttonx][buttony] == 3:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="red")
+            elif grid2[buttonx][buttony] == 4:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#00008B")
+            elif grid2[buttonx][buttony] == 5:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#8B0000")
+            elif grid2[buttonx][buttony] == 6:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#40E0D0")
+            elif grid2[buttonx][buttony] == 7:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="black")
+            elif grid2[buttonx][buttony] == 8:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#D3D3D3")
+            elif grid2[buttonx][buttony] == 'x':
+                button1 = Button(canvas, text="", image=bomb)
+            else:
+                button1 = Button(canvas,
+                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="black")
+            window1 = canvas.create_window(c, e, height=50, width=50, window=button1)
+    root.update()
+
+
+def resetgrids2():
+    global firstgo
+    resetgrids()
+    refreshbuttons()
+
+
+resetgrids()
+endgame = False
+
+# gui stuff:
+root = Tk()
+frame = Frame(root)
 
 HEIGHT = 30
 WIDTH = 30
@@ -370,64 +450,15 @@ thumbnail = Image.open(path)
 thumbnail.thumbnail((HEIGHT, WIDTH), Image.ANTIALIAS)
 bomb = ImageTk.PhotoImage(thumbnail)
 
-def gencanvas():
-    global canvas
-    canvas=Canvas(frame,width=500,height=500)
-    canvas.pack()
-label1=Label(text="Minesweeper")
+label1 = Label(text="Minesweeper")
 label1.pack(side=TOP)
 frame.pack()
-def determinepos(x,y):
-    #print(x,y)
-    changegrid(x,y)
-    refreshbuttons()
-buttonnumber=0
-buttonx=-1
-buttony=-1
+
+buttonnumber = 0
+buttonx = -1
+buttony = -1
 gencanvas()
-def refreshbuttons():
-    canvas.delete(ALL)
-    gc.collect()
-    global buttonx
-    global buttony
-    buttonx=-1
-    buttony=-1
-    buttonnumber=0
-    for d in range(50,1000,100):
-        buttonx=buttonx+1
-        buttony=-1
-        for b in range(50,1000,100):
-            buttony=buttony+1
-            e=d/2
-            c=b/2
-            buttonnumber=buttonnumber+1
-            if grid2[buttonx][buttony]==1:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="blue")
-            elif grid2[buttonx][buttony]==2:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="green")
-            elif grid2[buttonx][buttony]==3:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="red")
-            elif grid2[buttonx][buttony]==4:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="#00008B")
-            elif grid2[buttonx][buttony]==5:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="#8B0000")
-            elif grid2[buttonx][buttony]==6:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="#40E0D0")
-            elif grid2[buttonx][buttony]==7:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="black")
-            elif grid2[buttonx][buttony]==8:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="#D3D3D3")
-            elif grid2[buttonx][buttony]=='x':
-                button1=Button(root, text="", image=bomb)
-            else:
-                button1=Button(command=lambda buttonx2=buttonx,buttony2=buttony: determinepos(buttonx2,buttony2),text=grid2[buttonx][buttony],font=("Courier", 44),fg="black")
-            window1=canvas.create_window(c,e,height=50,width=50,window=button1)
-    root.update()
-def resetgrids2():
-    global firstgo
-    resetgrids()
-    refreshbuttons()
-resetbutton=Button(frame,text="reset",command=resetgrids2)
+resetbutton = Button(frame, text="reset", command=resetgrids2)
 resetbutton.pack(side=BOTTOM)
 refreshbuttons()
 root.mainloop()
