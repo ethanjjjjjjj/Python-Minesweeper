@@ -381,52 +381,41 @@ def refreshbuttons():
     buttony = -1
     buttonnumber = 0
     for d in range(50, 1000, 100):
-        buttonx = buttonx + 1
+        buttonx += 1
         buttony = -1
         for b in range(50, 1000, 100):
-            buttony = buttony + 1
+            buttony += 1
             e = d / 2
             c = b / 2
-            buttonnumber = buttonnumber + 1
-            if grid2[buttonx][buttony] == 1:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="blue")
-            elif grid2[buttonx][buttony] == 2:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="green")
-            elif grid2[buttonx][buttony] == 3:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="red")
-            elif grid2[buttonx][buttony] == 4:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#00008B")
-            elif grid2[buttonx][buttony] == 5:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#8B0000")
-            elif grid2[buttonx][buttony] == 6:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#40E0D0")
-            elif grid2[buttonx][buttony] == 7:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="black")
-            elif grid2[buttonx][buttony] == 8:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="#D3D3D3")
-            elif grid2[buttonx][buttony] == 'x':
+            buttonnumber += 1
+
+            if grid2[buttonx][buttony] == 'x':
                 button1 = Button(canvas, text="", image=bomb)
-            else:
-                button1 = Button(canvas,
-                                 command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
-                                 text=grid2[buttonx][buttony], font=("Courier", 44), fg="black")
-            window1 = canvas.create_window(c, e, height=50, width=50, window=button1)
+                canvas.create_window(c, e, height=50, width=50, window=button1)
+                continue  # Create bomb and continue
+
+            color = "black"
+            if grid2[buttonx][buttony] == 1:
+                color = "blue"
+            elif grid2[buttonx][buttony] == 2:
+                color = "green"
+            elif grid2[buttonx][buttony] == 3:
+                color ="red"
+            elif grid2[buttonx][buttony] == 4:
+                color ="#00008B"
+            elif grid2[buttonx][buttony] == 5:
+                color ="#8B0000"
+            elif grid2[buttonx][buttony] == 6:
+                color ="#40E0D0"
+            elif grid2[buttonx][buttony] == 7:
+                color ="black"
+            elif grid2[buttonx][buttony] == 8:
+                color ="#D3D3D3"
+
+            button1 = Button(canvas,
+                             command=lambda buttonx2=buttonx, buttony2=buttony: determinepos(buttonx2, buttony2),
+                             text=grid2[buttonx][buttony], font=("Courier", 44), fg=color)
+            canvas.create_window(c, e, height=50, width=50, window=button1)
     root.update()
 
 
