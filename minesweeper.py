@@ -4,6 +4,7 @@
 import gc
 from tkinter import *
 import time
+import itertools as it
 import random #imports the library to make randome coordinates for the bombs
 from PIL import ImageTk, Image
 
@@ -53,12 +54,14 @@ def resetgrids():
         0, 10
     ):  # calculates values to go in the boxes based on how many bombs are next to them
         for b in range(0, 10):
-            if grid[a, b] != "x":
-                check_tuple = product([a - 1, a, a + 1], [b - 1, b, b + 1]).remove([a, b])
-                for elem in check_tuple:
+            if grid[a][b] != "x":
+                check_tuple = it.product([a - 1, a, a + 1], [b - 1, b, b + 1])
+                check_list = [list(x) for x in check_tuple]
+                check_list.remove([a, b])
+                for elem in reversed(check_list):
                     if elem[0] < 0 or elem[0] > 9 or elem[1] < 0 or elem[1] > 9:
-                        check_tuple.remove(elem)
-                grid[a, b] = len([x for x in check_tuple if grid[x] == "x"])
+                        check_list.remove(elem)
+                grid[a][b] = len([x for x in check_list if grid[x[0]][x[1]] == "x"])
                 # sets the value of the box to 0 if there are no bombs near it
     blanks = []  # sets the list containing all of the blank boxes to 0
     for e in range(0, 10):  # puts all the blank values into a list
