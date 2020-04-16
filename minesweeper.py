@@ -4,6 +4,7 @@
 import gc
 from tkinter import *
 import time
+import itertools as it
 import random #imports the library to make randome coordinates for the bombs
 from PIL import ImageTk, Image
 
@@ -47,109 +48,26 @@ def resetgrids():
         if grid[x][y] == "x":
             pass
         else:
-            grid[x][y]="x"
-            bombs=bombs+1#adds 1 to the number of bombs in the grid
-    for a in range(0,10):#calculates values to go in the boxes based on how many bombs are next to them
-        for b in range(0,10):
-            gridvalue=0 #sets the initial value of a box to 0
-            if a==0 and b==0:#top left corner       Specific cases for checking surrounding boxes
-                if grid[1][0]=="x":
-                    gridvalue=gridvalue+1
-                if grid[1][1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[0][1]=="x":
-                    gridvalue=gridvalue+1
-            elif a==0 and b==9:#top right corner
-                if grid[a][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b]=="x":
-                    gridvalue=gridvalue+1
-            elif a==9 and b==0:#bottom left
-                if grid[a-1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b+1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a][b+1]=="x":
-                    gridvalue=gridvalue+1
-            elif a==9 and b==9:#bottom right
-                if grid[a-1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a][b-1]=="x":
-                    gridvalue=gridvalue+1
-            elif a>0 and a<9 and b==0:#left column
-                if grid[a+1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b+1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a][b+1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b+1]=="x":
-                    gridvalue=gridvalue+1
-            elif a>0 and a < 9 and b==9:#right column
-                if grid[a-1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b]=="x":
-                    gridvalue=gridvalue+1
-            elif 0<b and b<9 and a==0: #top row
-                if grid[0][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[1][b+1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[0][b+1]:
-                    gridvalue=gridvalue+1
-            elif 0<b and b<9 and a==9: #bottom row
-                if grid[a][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b+1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a][b+1]:
-                    gridvalue=gridvalue+1
-            elif a>0 and a<9 and b>0 and b<9:#main section
-                if grid[a-1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a-1][b+1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a][b+1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b-1]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b]=="x":
-                    gridvalue=gridvalue+1
-                if grid[a+1][b+1]=="x":
-                    gridvalue=gridvalue+1
-            if grid[a][b]=="x":#skips the box if it has a bomb in it
-                pass
-            else:
-                grid[a][b]=gridvalue #sets the value of the box to 0 if there are no bombs near it
-    blanks=[]#sets the list containing all of the blank boxes to 0
-    for e in range(0,10):#puts all the blank values into a list
-        for f in range(0,10):
-            if grid[e][f]==0:
-                blanks.append([e,f])
+            grid[x][y] = "x"
+            bombs = bombs + 1  # adds 1 to the number of bombs in the grid
+    for a in range(
+        0, 10
+    ):  # calculates values to go in the boxes based on how many bombs are next to them
+        for b in range(0, 10):
+            if grid[a][b] != "x":
+                check_tuple = it.product([a - 1, a, a + 1], [b - 1, b, b + 1])
+                check_list = [list(x) for x in check_tuple]
+                check_list.remove([a, b])
+                for elem in reversed(check_list):
+                    if elem[0] < 0 or elem[0] > 9 or elem[1] < 0 or elem[1] > 9:
+                        check_list.remove(elem)
+                grid[a][b] = len([x for x in check_list if grid[x[0]][x[1]] == "x"])
+                # sets the value of the box to 0 if there are no bombs near it
+    blanks = []  # sets the list containing all of the blank boxes to 0
+    for e in range(0, 10):  # puts all the blank values into a list
+        for f in range(0, 10):
+            if grid[e][f] == 0:
+                blanks.append([e, f])
 
 
 def printList():#prints out the 2d grid
@@ -167,7 +85,7 @@ def printList():#prints out the 2d grid
     ##usery=(9-usery)+1#converts the user's x and y inputs into indexes for the grid list
     #userx=userx-1
 def changegrid(usery,userx):
-    
+
     global touching
     global blanks
     global firstgo
@@ -176,7 +94,7 @@ def changegrid(usery,userx):
             resetgrids()
         firstgo=firstgo+1
     grid2[usery][userx]=grid[usery][userx]
-    
+
     if grid[usery][userx]==0: #checks if the user chose a box that is blank(has no bombs next to it)
 
         touching=[] #defines a new list to store the coordinates of all the adjacent blank boxes next to the one the user selects
@@ -229,7 +147,7 @@ def changegrid(usery,userx):
                         possible.append([y2+1,x2+1])
                     except:
                         pass
-                    
+
                     for i3 in range(0,len(possible)):#goes through the list of possible adjacents
                         if (possible[i3] in blanks): #checks if any of them are on the list of blank boxes
                             if possible[i3] in  touching: #if it is already in the list of touching blanks it does nothing
@@ -313,7 +231,7 @@ def changegrid(usery,userx):
                             grid2[ny+1][nx+1]=grid[ny+1][nx+1]
                         except:
                             pass
-                    
+
                     else:
                         try:
                             grid2[ny-1][nx-1]=grid[ny-1][nx-1]
@@ -349,9 +267,9 @@ def changegrid(usery,userx):
                             pass
                 except:
                     pass
-                
+
         touching=[]
-    #printList()   #prints the grid for the user (with any blanks or numbers currently being shown to the user) 
+    #printList()   #prints the grid for the user (with any blanks or numbers currently being shown to the user)
     if grid[usery][userx]=="x": #if the user chose a box with a mine on it then it prints a message and ends the loop
         print("you hit a mine")
         refreshbuttons()
